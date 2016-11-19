@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# © 2016 jugular@shadowplay.net ALL RIGHTS RESERVED
+
 # parameters
 # $1 - project name
 # $2 - app name
