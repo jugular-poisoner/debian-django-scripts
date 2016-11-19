@@ -1,4 +1,6 @@
 #!/bin/bash
 
+# © 2016 jugular@shadowplay.net ALL RIGHTS RESERVED
+
 python3 manage.py makemigrations
 
