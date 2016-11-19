@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# parameters
+# $1 - project name
+# $2 - app name
+# $3 - db NAME 
+# $4 - db USER
+# $5 - db PASS
+# $6 - superuser 
+# $7 - superuser email
+# $8 - superuser password
+
+if [ $# -lt 8 ]
+then
+	echo "Usage: djnew project app db_name db_user db_password super super_email super_password"
+	exit;
+fi
+
+curdir=`pwd`
+
+djproject $1
+
+projdir="$curdir/$1/$1"
+
+read -r -d '' replacement << EOM
+DATABASES = {\n
+    'default': {\n
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',\n
+        'NAME': '$3',\n
+        'USER': '$4',\n
+        'PASSWORD': '$5',\n
+        'HOST': 'localhost',\n
+        'PORT': '',\n
+    }\n
+}\n
+EOM
+
+replacement=`echo ${replacement} | tr '\n' "\\n"`
+
+sed -ni "/# Database/{p;:a;N;/# Password validation/!ba;s/.*\n/${replacement}\n/};p" $projdir/settings.py
+
+cd $1
+
+djapp $2
+
+djmigrate
+
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('$6', '$7', '$8')" | python3 manage.py shell

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# $1 - database
+# $2 - user
+# $3 - password
+
+if [ $# -lt 3 ]
+then
+	echo "Usage: djdatabase db_name db_user db_password"
+	exit;
+fi
+
+su - postgres -c "createuser $2; createdb -O $2 $1; psql -c \"alter user $2 with encrypted password '$3';\"; "
+
+

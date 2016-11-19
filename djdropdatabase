@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# $1 - database
+# $2 - user
+
+if [ $# -lt 2 ]
+then
+	echo "Usage: djdropdatabase db_name db_user"
+	exit;
+fi
+
+su - postgres -c "dropdb $1; dropuser $2"
+
+
